@@ -37,6 +37,12 @@ variable "firebase_env_orchestrator_id" {
   default     = "env-orchestrator"
 }
 
+variable "firebase_image_name" {
+  description = "Name of the Firebase Image, stored in Artifact Registry."
+  type        = string
+  default     = "fb-builder"
+}
+
 variable "region" {
   description = "Default region for all resources."
   type        = string

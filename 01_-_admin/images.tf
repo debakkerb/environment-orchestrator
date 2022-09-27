@@ -29,3 +29,10 @@ module "terraform_builder" {
   terraform_version  = var.terraform_version
   image_name         = "${var.region}-docker.pkg.dev/${data.google_project.default.project_id}/${google_artifact_registry_repository.builder_images_registry.name}/${var.terraform_image_name}"
 }
+
+module "firebase_builder" {
+  source = "../00_-_modules/firebase_builder"
+
+  project_id = data.google_project.default.project_id
+  image_name = "${var.region}-docker.pkg.dev/${data.google_project.default.project_id}/${google_artifact_registry_repository.builder_images_registry.name}/${var.firebase_image_name}"
+}
