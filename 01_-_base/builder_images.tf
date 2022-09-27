@@ -13,3 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+module "terraform_builder" {
+  source = "../00_-_modules/terraform_builder"
+
+  project_id = data.google_project.default.project_id
+  terraform_checksum = ""
+}

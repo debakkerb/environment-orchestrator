@@ -19,12 +19,19 @@ locals {
     "cloudbuild.googleapis.com",
     "sourcerepos.googleapis.com",
     "artifactregistry.googleapis.com",
-    "firebase.googleapis.com"
+    "firebase.googleapis.com",
+    "storage.googleapis.com"
   ]
 }
 
 data "google_project" "default" {
   project_id = var.admin_project_id
+}
+
+resource "google_project_service" "enabled_apis" {
+  for_each = toset(local.project_apis)
+  project  = data.google_project.default.project_id
+  service  = each.value
 }
 
 resource "random_id" "default" {
@@ -62,8 +69,6 @@ resource "google_storage_bucket" "terraform_state_bucket" {
       num_newer_versions = 5
     }
   }
-}
 
-resource "google_sourcerepo_repository" "firebase_source_code" {
-  name = ""
+  depends_on = [google_project_service.enabled_apis]
 }
