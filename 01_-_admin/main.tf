@@ -72,3 +72,11 @@ resource "google_storage_bucket" "terraform_state_bucket" {
 
   depends_on = [google_project_service.enabled_apis]
 }
+
+resource "local_file" "backend" {
+  filename = "${path.module}/backend.tf"
+  content = templatefile("${path.module}/templates", {
+    TERRAFORM_STATE_BUCKET_NAME  = google_storage_bucket.terraform_state_bucket.name
+    TERRAFORM_STATE_ADMIN_PREFIX = "state/admin"
+  })
+}

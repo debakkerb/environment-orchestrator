@@ -25,16 +25,34 @@ variable "admin_project_id" {
   type        = string
 }
 
+variable "builder_registry_id" {
+  description = "ID of the Artifact Registry where the Cloud Build images will be stored."
+  type        = string
+  default     = "cloud-build-registry"
+}
+
 variable "firebase_env_orchestrator_id" {
   description = "ID of the service account that will create the Firebase environments."
   type        = string
   default     = "env-orchestrator"
 }
 
+variable "region" {
+  description = "Default region for all resources."
+  type        = string
+  default     = "europe-west1"
+}
+
 variable "terraform_checksum" {
   description = "Checksum of the Terraform binary."
   type        = string
   default     = "380ca822883176af928c80e5771d1c0ac9d69b13c6d746e6202482aedde7d457"
+}
+
+variable "terraform_image_name" {
+  description = "Image name in Artifact Registry for the Terraform image."
+  type        = string
+  default     = "tf-builder"
 }
 
 variable "terraform_state_bucket_name" {
@@ -47,4 +65,10 @@ variable "terraform_version" {
   description = "What version of Terraform you want to use."
   type        = string
   default     = "1.3.0"
+}
+
+variable "zone" {
+  description = "Default zone for all resources."
+  type        = string
+  default     = "europe-west1-b"
 }

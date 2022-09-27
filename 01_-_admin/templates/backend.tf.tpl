@@ -14,9 +14,32 @@
  * limitations under the License.
  */
 
-module "terraform_builder" {
-  source = "../00_-_modules/terraform_builder"
+provider "google" {
+  region = var.region
+  zone   = var.zone
+}
 
-  project_id = data.google_project.default.project_id
-  terraform_checksum = ""
+provider "google-beta" {
+  region = var.region
+  zone   = var.zone
+}
+
+terraform {
+  required_version = ">= 1.3.0"
+
+  required_providers = {
+    google = {
+      source  = "hashicorp/google"
+      version = ">= 4.38.0"
+    }
+    google-beta = {
+      source  = "hashicorp/google-beta"
+      version = ">= 4.38.0"
+    }
+  }
+
+  backend "gcs" {
+    bucket = "${TERRAFORM_STATE_BUCKET_NAME}"
+    state  = "${TERRAFORM_STATE_ADMIN_PREFIX}"
+  }
 }
