@@ -25,6 +25,12 @@ variable "admin_project_id" {
   type        = string
 }
 
+variable "billing_account_id" {
+  description = "Billing account that should be used for all projects."
+  type        = string
+  default     = null
+}
+
 variable "builder_registry_id" {
   description = "ID of the Artifact Registry where the Cloud Build images will be stored."
   type        = string
@@ -47,6 +53,12 @@ variable "region" {
   description = "Default region for all resources."
   type        = string
   default     = "europe-west1"
+}
+
+variable "set_billing_permissions" {
+  description = "Give the environment orchestrator permissions to add a billing account to a project."
+  type        = bool
+  default     = false
 }
 
 variable "terraform_checksum" {
