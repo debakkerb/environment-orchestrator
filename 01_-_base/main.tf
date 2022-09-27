@@ -1,0 +1,69 @@
+/**
+ * Copyright 2022 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+locals {
+  project_apis = [
+    "cloudbuild.googleapis.com",
+    "sourcerepos.googleapis.com",
+    "artifactregistry.googleapis.com",
+    "firebase.googleapis.com"
+  ]
+}
+
+data "google_project" "default" {
+  project_id = var.admin_project_id
+}
+
+resource "random_id" "default" {
+  byte_length = 2
+}
+
+resource "google_service_account" "orchestrator" {
+  project     = data.google_project.default.project_id
+  account_id  = var.firebase_env_orchestrator_id
+  description = "Service Account that orchestrates the creation of the different environments."
+}
+
+resource "google_service_account" "admin" {
+  project     = data.google_project.default.project_id
+  account_id  = var.admin_orchestrator_id
+  description = "Service Account that orchestrates the creation of the admin resources."
+}
+
+resource "google_storage_bucket" "terraform_state_bucket" {
+  project                     = data.google_project.default.project_id
+  location                    = "EU"
+  name                        = format("%s-%s", var.terraform_state_bucket_name, random_id.default.hex)
+  uniform_bucket_level_access = true
+  force_destroy               = true
+
+  versioning {
+    enabled = true
+  }
+
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+    condition {
+      num_newer_versions = 5
+    }
+  }
+}
+
+resource "google_sourcerepo_repository" "firebase_source_code" {
+  name = ""
+}
