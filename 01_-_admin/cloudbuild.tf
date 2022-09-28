@@ -14,3 +14,17 @@
  * limitations under the License.
  */
 
+resource "google_cloudbuild_trigger" "admin_trigger" {
+  project         = data.google_project.default.project_id
+  description     = "Cloud Build trigger to manage the Admin project and all it's dependent resources."
+  service_account = google_service_account.admin.id
+
+  trigger_template {
+    branch_name = "^main$"
+    repo_name   = google_sourcerepo_repository.git_repo.name
+  }
+
+  included_files = ["01-_-admin/**"]
+
+  filename = "01_-_admin/cloudbuild.yaml"
+}
