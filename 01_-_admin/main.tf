@@ -50,25 +50,3 @@ resource "google_service_account" "admin" {
   description = "Service Account that orchestrates the creation of the admin resources."
 }
 
-resource "google_storage_bucket" "terraform_state_bucket" {
-  project                     = data.google_project.default.project_id
-  location                    = "EU"
-  name                        = format("%s-%s", var.terraform_state_bucket_name, random_id.default.hex)
-  uniform_bucket_level_access = true
-  force_destroy               = true
-
-  versioning {
-    enabled = true
-  }
-
-  lifecycle_rule {
-    action {
-      type = "Delete"
-    }
-    condition {
-      num_newer_versions = 5
-    }
-  }
-
-  depends_on = [google_project_service.enabled_apis]
-}

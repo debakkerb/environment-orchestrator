@@ -37,6 +37,12 @@ variable "builder_registry_id" {
   default     = "cloud-build-registry"
 }
 
+variable "environment_state_bucket_name" {
+  description = "Name for the bucket where the state for all environments will be stored."
+  type        = string
+  default     = "environment-state-storage"
+}
+
 variable "firebase_env_orchestrator_id" {
   description = "ID of the service account that will create the Firebase environments."
   type        = string
