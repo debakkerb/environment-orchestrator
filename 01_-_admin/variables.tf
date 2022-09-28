@@ -67,6 +67,12 @@ variable "set_billing_permissions" {
   default     = false
 }
 
+variable "source_repo_name" {
+  description = "Name of the source repository."
+  type        = string
+  default     = "env-source-repo"
+}
+
 variable "target_folder_id" {
   description = "Folder where all customer environments are created."
   type        = string

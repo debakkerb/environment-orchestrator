@@ -49,4 +49,3 @@ resource "google_service_account" "admin" {
   account_id  = var.admin_orchestrator_id
   description = "Service Account that orchestrates the creation of the admin resources."
 }
-
