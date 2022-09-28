@@ -13,16 +13,3 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-resource "google_billing_account_iam_member" "orchestrator_billing_permissions" {
-  count              = var.set_billing_permissions ? 1 : 0
-  billing_account_id = var.billing_account_id
-  member             = "serviceAccount:${google_service_account.orchestrator.email}"
-  role               = "roles/billing.user"
-}
-
-resource "google_folder_iam_member" "project_creator" {
-  folder = var.target_folder_id
-  member = "serviceAccount:${google_service_account.orchestrator.email}"
-  role   = "roles/resourcemanager.projectCreator"
-}

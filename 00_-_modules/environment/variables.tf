@@ -14,15 +14,12 @@
  * limitations under the License.
  */
 
-resource "google_billing_account_iam_member" "orchestrator_billing_permissions" {
-  count              = var.set_billing_permissions ? 1 : 0
-  billing_account_id = var.billing_account_id
-  member             = "serviceAccount:${google_service_account.orchestrator.email}"
-  role               = "roles/billing.user"
+variable "unique_identifier" {
+  description = "Unique identifier, which will be added as a unique suffix to the project name."
+  type        = string
 }
 
-resource "google_folder_iam_member" "project_creator" {
-  folder = var.target_folder_id
-  member = "serviceAccount:${google_service_account.orchestrator.email}"
-  role   = "roles/resourcemanager.projectCreator"
+variable "project_name" {
+  description = "Name of the project, which will be augmented with the unique customer identifier."
+  type        = string
 }

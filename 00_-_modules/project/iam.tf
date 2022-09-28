@@ -14,15 +14,23 @@
  * limitations under the License.
  */
 
-resource "google_billing_account_iam_member" "orchestrator_billing_permissions" {
-  count              = var.set_billing_permissions ? 1 : 0
-  billing_account_id = var.billing_account_id
-  member             = "serviceAccount:${google_service_account.orchestrator.email}"
-  role               = "roles/billing.user"
+locals {
+  iam_members = flatten([
+    for member, roles in var.iam_members : [
+      for role in roles : {
+        role   = role
+        member = member
+      }
+    ]
+  ])
 }
 
-resource "google_folder_iam_member" "project_creator" {
-  folder = var.target_folder_id
-  member = "serviceAccount:${google_service_account.orchestrator.email}"
-  role   = "roles/resourcemanager.projectCreator"
+resource "google_project_iam_member" "additive_iam_permissions" {
+  for_each = {
+    for permission in local.iam_members: "${permission.role}${permission.member}" => permission
+  }
+
+  member  = each.value.member
+  project = local.project.project_id
+  role    = each.value.role
 }

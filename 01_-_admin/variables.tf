@@ -61,6 +61,11 @@ variable "set_billing_permissions" {
   default     = false
 }
 
+variable "target_folder_id" {
+  description = "Folder where all customer environments are created."
+  type        = string
+}
+
 variable "terraform_checksum" {
   description = "Checksum of the Terraform binary."
   type        = string

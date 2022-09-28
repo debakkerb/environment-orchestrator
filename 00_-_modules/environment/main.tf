@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-resource "google_billing_account_iam_member" "orchestrator_billing_permissions" {
-  count              = var.set_billing_permissions ? 1 : 0
-  billing_account_id = var.billing_account_id
-  member             = "serviceAccount:${google_service_account.orchestrator.email}"
-  role               = "roles/billing.user"
-}
+module "project" {
+  source = "../project"
 
-resource "google_folder_iam_member" "project_creator" {
-  folder = var.target_folder_id
-  member = "serviceAccount:${google_service_account.orchestrator.email}"
-  role   = "roles/resourcemanager.projectCreator"
+  project_name = var.project_name
+  random_id    = var.unique_identifier
+  project_apis = [
+    "firebase.googleapis.com",
+    "storage.googleapis.com",
+    "cloudfunctions.googleapis.com",
+    "firestore.googleapis.com"
+  ]
 }

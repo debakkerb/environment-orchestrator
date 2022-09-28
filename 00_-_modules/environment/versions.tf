@@ -14,15 +14,18 @@
  * limitations under the License.
  */
 
-resource "google_billing_account_iam_member" "orchestrator_billing_permissions" {
-  count              = var.set_billing_permissions ? 1 : 0
-  billing_account_id = var.billing_account_id
-  member             = "serviceAccount:${google_service_account.orchestrator.email}"
-  role               = "roles/billing.user"
-}
+terraform {
+  required_version = ">= 1.2.0"
 
-resource "google_folder_iam_member" "project_creator" {
-  folder = var.target_folder_id
-  member = "serviceAccount:${google_service_account.orchestrator.email}"
-  role   = "roles/resourcemanager.projectCreator"
+  required_providers {
+    google = {
+      source  = "hashicorp/google"
+      version = ">= 4.38.0"
+    }
+
+    google-beta = {
+      source  = "hashicorp/google-beta"
+      version = ">= 4.38.0"
+    }
+  }
 }
