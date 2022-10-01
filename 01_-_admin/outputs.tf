@@ -13,3 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+output "project_id" {
+  description = "Project ID that can be used by the other state files."
+  value       = data.google_project.default.project_id
+}
+
+output "project_number" {
+  description = "Number of the project project."
+  value       = data.google_project.default.number
+}
